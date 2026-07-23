@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:3001/products";
+const BASE_URL = "https://68ab1234.mockapi.io/api/v1/products";
 
 // Get all products
 export async function getProducts() {
