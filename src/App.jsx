@@ -32,7 +32,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="products" element={<ProductList />} />
           <Route path="add-product" element={<AddProduct />} />
-          <Route path="edit-product" element={<EditProduct />} />
+          <Route path="edit-product/:id" element={<EditProduct />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
