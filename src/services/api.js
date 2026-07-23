@@ -1,70 +1,88 @@
-const BASE_URL = "https://68ab1234.mockapi.io/api/v1/products";
+const API_URL = "http://localhost:3001/products";
 
-// Get all products
+
 export async function getProducts() {
-  const res = await fetch(BASE_URL);
+  const response = await fetch(API_URL);
 
-  if (!res.ok) {
+  if (!response.ok) {
     throw new Error("Failed to fetch products");
   }
 
-  return res.json();
+  const data = await response.json();
+
+  console.log("PRODUCT DATA:", data);
+
+  return data;
 }
 
-// Get one product
-export async function getProductById(id) {
-  const res = await fetch(`${BASE_URL}/${id}`);
 
-  if (!res.ok) {
+export async function getProductById(productId) {
+  const response = await fetch(
+    `${API_URL}/${productId}`
+  );
+
+  if (!response.ok) {
     throw new Error("Failed to fetch product");
   }
 
-  return res.json();
+  return await response.json();
 }
 
-// Add product
-export async function addProduct(product) {
-  const res = await fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(product),
-  });
 
-  if (!res.ok) {
-    throw new Error("Failed to add product");
+export async function createProduct(product) {
+  const response = await fetch(
+    API_URL,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to create product");
   }
 
-  return res.json();
+  return await response.json();
 }
 
-// Update product
-export async function updateProduct(id, product) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(product),
-  });
 
-  if (!res.ok) {
-    throw new Error("Failed to update product");
-  }
+export async function deleteProduct(productId) {
+  const response = await fetch(
+    `${API_URL}/${productId}`,
+    {
+      method: "DELETE",
+    }
+  );
 
-  return res.json();
-}
-
-// Delete product
-export async function deleteProduct(id) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: "DELETE",
-  });
-
-  if (!res.ok) {
+  if (!response.ok) {
     throw new Error("Failed to delete product");
   }
 
-  return true;
+  return await response.json();
+}
+
+
+export async function updateProduct(
+  productId,
+  product
+) {
+  const response = await fetch(
+    `${API_URL}/${productId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update product");
+  }
+
+  return await response.json();
 }
