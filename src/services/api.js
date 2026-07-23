@@ -1,6 +1,7 @@
-const API_URL = "http://localhost:3001/products";
+const API_URL = "https://dummyjson.com/products";
 
 
+// Get all products
 export async function getProducts() {
   const response = await fetch(API_URL);
 
@@ -12,10 +13,11 @@ export async function getProducts() {
 
   console.log("PRODUCT DATA:", data);
 
-  return data;
+  return data.products; 
 }
 
 
+// Get single product
 export async function getProductById(productId) {
   const response = await fetch(
     `${API_URL}/${productId}`
@@ -29,9 +31,10 @@ export async function getProductById(productId) {
 }
 
 
+// Create product
 export async function createProduct(product) {
   const response = await fetch(
-    API_URL,
+    `${API_URL}/add`,
     {
       method: "POST",
       headers: {
@@ -49,6 +52,7 @@ export async function createProduct(product) {
 }
 
 
+// Delete product
 export async function deleteProduct(productId) {
   const response = await fetch(
     `${API_URL}/${productId}`,
@@ -65,10 +69,8 @@ export async function deleteProduct(productId) {
 }
 
 
-export async function updateProduct(
-  productId,
-  product
-) {
+// Update product
+export async function updateProduct(productId, product) {
   const response = await fetch(
     `${API_URL}/${productId}`,
     {
@@ -86,3 +88,19 @@ export async function updateProduct(
 
   return await response.json();
 }
+
+
+// Get carts
+export async function getCarts() {
+  const response = await fetch(
+    "https://dummyjson.com/carts"
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch carts");
+  }
+
+  const data = await response.json();
+
+  return data.carts;
+}giv
