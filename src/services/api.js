@@ -13,11 +13,11 @@ export async function getProducts() {
 
   console.log("PRODUCT DATA:", data);
 
-  return data.products; 
+  return data.products;
 }
 
 
-// Get single product
+// Get single product by id
 export async function getProductById(productId) {
   const response = await fetch(
     `${API_URL}/${productId}`
@@ -31,7 +31,7 @@ export async function getProductById(productId) {
 }
 
 
-// Create product
+// Add product
 export async function createProduct(product) {
   const response = await fetch(
     `${API_URL}/add`,
@@ -103,4 +103,4 @@ export async function getCarts() {
   const data = await response.json();
 
   return data.carts;
-}giv
+}
