@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.admin-layout {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.admin-main {
+  margin-left: 260px;
+  padding: 30px;
+  min-height: 100vh;
+  width: calc(100% - 260px);
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .admin-main {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+}

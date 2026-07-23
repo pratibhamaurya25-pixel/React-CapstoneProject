@@ -1,0 +1,168 @@
+/* ===== Page ===== */
+
+.manage-products-page {
+  width: 100%;
+}
+
+.manage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.manage-header h1 {
+  font-size: 32px;
+  color: #1e293b;
+  margin: 0;
+}
+
+.btn-add-product {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.btn-add-product:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+/* ===== Table Card ===== */
+
+.table-card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  overflow-x: auto;
+}
+
+/* ===== Table ===== */
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px;
+  border-bottom: 2px solid #e2e8f0;
+  text-align: left;
+}
+
+.admin-table tbody td {
+  padding: 18px 16px;
+  border-bottom: 1px solid #edf2f7;
+  vertical-align: middle;
+}
+
+.admin-table tbody tr {
+  transition: .25s;
+}
+
+.admin-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* ===== Image ===== */
+
+.table-thumb {
+  width: 65px;
+  height: 65px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* ===== Product Name ===== */
+
+.admin-table td:nth-child(2) {
+  font-weight: 600;
+  color: #1e293b;
+  width: 340px;
+}
+
+/* ===== Price ===== */
+
+.admin-table td:nth-child(3) {
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* ===== Category ===== */
+
+.admin-table td:nth-child(4) {
+  text-transform: capitalize;
+  color: #64748b;
+}
+
+/* ===== Actions ===== */
+
+.admin-table th:last-child,
+.admin-table td:last-child {
+  width: 170px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ===== Buttons ===== */
+
+.btn-action {
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.btn-action.edit {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.btn-action.edit:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-action.delete {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.btn-action.delete:hover {
+  background: #dc2626;
+  color: white;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width:900px){
+
+.manage-header{
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+}
+
+.admin-table{
+min-width:750px;
+}
+
+}

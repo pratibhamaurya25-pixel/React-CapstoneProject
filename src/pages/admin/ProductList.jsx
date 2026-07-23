@@ -1,11 +1,24 @@
-import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
-import { getProducts, deleteProduct} from "../../services/api";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+
+import {
+  getProducts,
+  deleteProduct,
+} from "../../services/api";
+
 import Loader from "../../components/Loader";
+import "../../styles/ProductList.css";
 
 function ProductList() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const {
-    data: products,
+    data: products = [],
     isLoading,
     isError,
     error,
@@ -14,78 +27,122 @@ function ProductList() {
     queryFn: getProducts,
   });
 
-  const queryClient = useQueryClient();
-
   const deleteMutation = useMutation({
     mutationFn: deleteProduct,
 
     onSuccess: () => {
-      alert("Product Deleted Successfully");
+      alert("Product Deleted Successfully!");
 
-      qyeryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["products"],
       });
     },
 
-    onError: () => {
+    onError: (error) => {
+      console.error(error);
       alert("Failed to Delete Product");
-    }
-  })
+    },
+  });
 
-  function handleDelete(id){
+  const handleDelete = (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this product?"
     );
 
-    if (confirmDelete){
+    if (confirmDelete) {
       deleteMutation.mutate(id);
     }
-  }
+  };
 
-  if (isLoading){
-    return <Loader />
-  }
+  if (isLoading) return <Loader />;
 
-  if (isError){
+  if (isError) {
     return <h2>{error.message}</h2>;
   }
 
-  return(
-    <div>
-      <h1>Manage Products</h1>
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+  return (
+    <div className="manage-products-page">
+      <div className="manage-header">
+        <h1>Manage Products</h1>
 
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td>
-                <img src={product.image} alt={product.title} width="60" />
-              </td>
+        <button
+          className="btn-add-product"
+          onClick={() => navigate("/admin/add-product")}
+        >
+          + Add Product
+        </button>
+      </div>
 
-              <td>{product.title}</td>
-              <td>{product.price}</td>
-              <td>{product.category}</td>
-
-              <td>
-                <Link to={`/admin/edit-product/${product.id}`}>Edit</Link>
-                {"|"}
-                <button onClick={()=> handleDelete(product.id)}>Delete</button>
-              </td>
+      <div className="table-card">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th className="actions-heading">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id}>
+                <td>
+                  <img
+                    src={product.thumbnail || product.image}
+                    alt={product.title}
+                    className="table-thumb"
+                  />
+                </td>
+
+                <td className="product-title">{product.title}</td>
+
+                <td className="product-price">
+                  ₹ {product.price}
+                </td>
+
+                <td className="product-category">
+                  {product.category}
+                </td>
+
+                <td>
+                  <div className="action-buttons">
+                    <button
+                      className="btn-action edit"
+                      onClick={() =>
+                        navigate(`/admin/edit-product/${product.id}`)
+                      }
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      className="btn-action delete"
+                      onClick={() => handleDelete(product.id)}
+                      disabled={deleteMutation.isPending}
+                    >
+                      {deleteMutation.isPending
+                        ? "Deleting..."
+                        : "Delete"}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+
+            {products.length === 0 && (
+              <tr>
+                <td colSpan="5" className="empty-table">
+                  No Products Found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
-  )
+  );
 }
 
 export default ProductList;

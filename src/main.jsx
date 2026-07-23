@@ -6,17 +6,18 @@ import { AuthProvider } from "./context/AuthContext";
 import { CartProvider} from "./context/CartContext";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CartProvider>
-        <App />
-        </CartProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+  <AuthProvider>
+    <CartProvider>
+      <App />
+    </CartProvider>
+  </AuthProvider>
+</QueryClientProvider>
   </StrictMode>,
 );

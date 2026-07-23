@@ -1,31 +1,51 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import "../styles/ProductCard.css";
 
 function ProductCard({ product }) {
-  const {addToCart} = useContext(CartContext);
+  const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
+
+  const imageSrc = product.thumbnail || product.image;
+
   return (
     <div className="product-card">
+      <div className="product-card-img-wrapper">
+        <img src={imageSrc} alt={product.title} />
+      </div>
 
-      <img
-        src={product.image}
-        alt={product.title}
-        width="150"
-      />
+      <div className="product-card-body">
+        <span className="product-card-category">
+          {product.category}
+        </span>
 
-      <h3>{product.title}</h3>
+        <h3 className="product-card-title">
+          {product.title}
+        </h3>
 
-      <p>₹ {product.price}</p>
+        <div className="product-card-footer">
+          <p className="product-card-price">
+            ₹{product.price}
+          </p>
 
-      <p>{product.category}</p>
+          <div className="product-buttons">
+            <button
+              className="btn-cart"
+              onClick={() => addToCart(product)}
+            >
+              Add to Cart
+            </button>
 
-      <Link to={`/products/${product.id}`}>View Details</Link>
-
-      <br />
-      <br />
-
-      <button onClick={() => addToCart(product)}>Add To Cart</button>
-
+            <button
+              className="btn-view-details"
+              onClick={() => navigate(`/products/${product.id}`)}
+            >
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
