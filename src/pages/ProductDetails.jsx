@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "../services/api";
 import Loader from "../components/Loader";
+import "../styles/ProductDetails.css";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -10,41 +11,48 @@ function ProductDetails() {
     data: product,
     isLoading,
     isError,
-    error,
   } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
   });
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError) {
-    return <h2>{error.message}</h2>;
-  }
+  if (isLoading) return <Loader />;
+  if (isError) return <h2>Error loading product</h2>;
 
   return (
-    <div>
-      <img src={product.image} alt={product.title} width="250" />
+    <div className="product-details">
+      <div className="product-image">
+        <img
+          src={product.thumbnail || product.image}
+          alt={product.title}
+        />
+      </div>
 
-      <h2>{product.title}</h2>
+      <div className="product-info">
+        <h1>{product.title}</h1>
 
-      <h3>{product.price}</h3>
+        <p className="category">
+          <strong>Category:</strong> {product.category}
+        </p>
 
-      <p><strong>Category:</strong> {product.category}</p>
+        <p className="price">₹{product.price}</p>
 
-      <p>
-        <strong>Description:</strong>
-      </p>
+        <p className="rating">
+          ⭐ {product.rating} ({product.reviewCount} Reviews)
+        </p>
 
-      <p>{product.description}</p>
+        <p className="stock">
+          <strong>Stock:</strong> {product.stock}
+        </p>
 
-      <p>
-        ⭐ {product.rating.rate} ({product.rating.count} Reviews)
-      </p>
+        <p className="description">
+          {product.description}
+        </p>
 
-      <button>Add To Cart</button>
+        <button className="buy-btn">
+          Add to Cart
+        </button>
+      </div>
     </div>
   );
 }

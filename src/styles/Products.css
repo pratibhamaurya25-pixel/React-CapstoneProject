@@ -1,0 +1,160 @@
+/* ==========================
+   Products Page
+========================== */
+
+.products-page {
+  max-width: 1300px;
+  margin: 40px auto;
+  padding: 0 20px 50px;
+  min-height: 100vh;
+}
+
+/* ==========================
+   Header
+========================== */
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.products-header h1 {
+  font-size: 2.5rem;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* ==========================
+   Search Bar
+========================== */
+
+.search-input {
+  width: 350px;
+  max-width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+}
+
+/* ==========================
+   Products Grid
+========================== */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 30px;
+}
+
+/* ==========================
+   Error Message
+========================== */
+
+.error-msg {
+  text-align: center;
+  color: red;
+  font-size: 22px;
+  margin-top: 100px;
+}
+
+/* ==========================
+   Pagination
+========================== */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 50px;
+}
+
+.pagination button {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #374151;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.pagination button:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.pagination .active {
+  background: #2563eb;
+  color: white;
+}
+
+/* ==========================
+   Tablet
+========================== */
+
+@media (max-width: 992px) {
+
+  .products-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .products-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================
+   Mobile
+========================== */
+
+@media (max-width: 768px) {
+
+  .products-page {
+    padding: 20px 15px;
+  }
+
+  .products-header h1 {
+    font-size: 2rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .pagination button {
+    width: 40px;
+    height: 40px;
+  }
+}

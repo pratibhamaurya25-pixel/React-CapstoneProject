@@ -1,57 +1,55 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/api";
-import Loader from "../components/Loader";
 import ProductCard from "../components/ProductCard";
-
-import { useState, useEffect } from "react";
-import SearchBar from "../components/Searchbar";
+import Loader from "../components/Loader";
+import "../styles/Products.css";
 
 function Products() {
-  const {
-    data: products = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const [search, setSearch] = useState("");
+
+  const { data: products, isLoading, isError } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
 
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  if (isLoading) return <Loader />;
+  if (isError) return <h2 className="error-msg">Something went wrong</h2>;
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [search]);
-
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(debouncedSearch.toLowerCase()),
+  const filteredProducts = products?.filter((product) =>
+    product.title.toLowerCase().includes(search.toLowerCase())
   );
 
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError) {
-    return <h2>{error.message}</h2>;
-  }
-
   return (
-    <div>
+    <div className="products-page">
+      <div className="products-header">
+        <h1>Products</h1>
 
-      <SearchBar search={search} setSearch={setSearch} />
+        {/* Search Input */}
+        <input
+          type="text"
+          placeholder="🔍 Search Products..."
+          className="search-input"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-      <h1>Products</h1>
-
-      <div>
-        {filteredProducts.map((product) => (
+      <div className="products-grid">
+        {filteredProducts?.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+
+      {/* Remove this if you haven't implemented pagination */}
+      {/* 
+      <div className="pagination">
+        <button className="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>&gt;</button>
+      </div>
+      */}
     </div>
   );
 }

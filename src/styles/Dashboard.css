@@ -1,0 +1,178 @@
+/* ===========================
+   Dashboard Page
+=========================== */
+
+.dashboard-page {
+  padding: 100px 30px 40px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.dashboard-page h1 {
+  font-size: 32px;
+  color: #1f2937;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+/* ===========================
+   Stats Cards
+=========================== */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.stat-title {
+  font-size: 15px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 30px;
+  color: #111827;
+  font-weight: bold;
+}
+
+.stat-badge {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===========================
+   Table Card
+=========================== */
+
+.table-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.08);
+  overflow-x: auto;
+}
+
+.table-card h3 {
+  margin-bottom: 20px;
+  color: #1f2937;
+}
+
+/* ===========================
+   Table
+=========================== */
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead {
+  background: #2563eb;
+  color: white;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 15px;
+  text-align: left;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.text-muted {
+  color: #6b7280;
+}
+
+/* ===========================
+   Status Pills
+=========================== */
+
+.status-pill {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-pill.pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-pill.completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-pill.processing {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:992px){
+
+  .dashboard-page{
+    padding:90px 20px 30px;
+  }
+
+  .stats-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:768px){
+
+  .dashboard-page h1{
+    font-size:26px;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+  .admin-table{
+    min-width:700px;
+  }
+
+  .table-card{
+    overflow-x:auto;
+  }
+}
