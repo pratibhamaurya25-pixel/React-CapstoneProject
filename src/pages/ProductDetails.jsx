@@ -3,9 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "../services/api";
 import Loader from "../components/Loader";
 import "../styles/ProductDetails.css";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
+
+
 
 function ProductDetails() {
   const { id } = useParams();
+  const { addToCart } = useContext(CartContext);
 
   const {
     data: product,
@@ -49,7 +54,7 @@ function ProductDetails() {
           {product.description}
         </p>
 
-        <button className="buy-btn">
+        <button className="buy-btn" onClick={() => addToCart(product)}>
           Add to Cart
         </button>
       </div>
