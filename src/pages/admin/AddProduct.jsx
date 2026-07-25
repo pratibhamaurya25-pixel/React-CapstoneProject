@@ -25,6 +25,7 @@ function AddProduct() {
   });
 
   function handleAddProduct(product) {
+    console.log("Product Data: ", product)
     mutation.mutate(product);
   }
 
