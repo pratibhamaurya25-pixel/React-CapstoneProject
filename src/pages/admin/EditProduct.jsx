@@ -1,12 +1,12 @@
-import {useParams, useNavigate} from "react-router-dom";
-import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import ProductForm from "../../components/ProductForm";
 import Loader from "../../components/Loader";
 
 import { getProductById, updateProduct } from "../../services/api";
 
 function EditProduct() {
-  const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -14,53 +14,50 @@ function EditProduct() {
     data: product,
     isLoading,
     isError,
-    error
+    error,
   } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
   });
 
   const mutation = useMutation({
-    mutationFn: (updateProduct) => updateProduct(id, updateProduct),
+    mutationFn: (productData) => updateProduct(id, productData),
 
     onSuccess: () => {
       alert("Product Updated Successfully");
 
-      qyeryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["products"],
       });
 
       navigate("/admin/products");
     },
 
-    onError: () => {
+    onError: (error) => {
+      console.error(error);
       alert("Failed to update product");
     },
   });
 
-  function handleUpdate(productData){
+  function handleUpdate(productData) {
     mutation.mutate(productData);
   }
 
-  if(isLoading){
-    return <Loader />
-  }
+  if (isLoading) return <Loader />;
 
-  if(isError){
-    return <h2>{error.message}</h2>
-  }
+  if (isError) return <h2>{error.message}</h2>;
 
-  return(
+  return (
     <div>
       <h1>Edit Product</h1>
 
       <ProductForm
-      initialData={product}
-      onSubmit={handleUpdate}
-      buttonText="Update Product"
+        initialData={product}
+        onSubmit={handleUpdate}
+        buttonText="Update Product"
       />
     </div>
-  )
+  );
 }
 
-export default EditProduct; 
+export default EditProduct;

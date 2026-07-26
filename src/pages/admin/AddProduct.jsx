@@ -1,4 +1,3 @@
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import ProductForm from "../../components/ProductForm";
@@ -12,24 +11,34 @@ function AddProduct() {
     mutationFn: createProduct,
 
     onSuccess: (newProduct) => {
-      alert("Product Added Successfully");
+      alert("Product Added Successfully!");
 
       queryClient.setQueryData(["products"], (oldProducts = []) => {
-        return [...oldProducts, newProduct];
+        // Remove duplicate product if it already exists
+        const filteredProducts = oldProducts.filter(
+          (product) => product.id !== newProduct.id
+        );
+
+        // Give the product a unique ID for React
+        const productWithUniqueId = {
+          ...newProduct,
+          id: Date.now(),
+        };
+
+        return [...filteredProducts, productWithUniqueId];
       });
 
       navigate("/admin/products");
     },
 
     onError: (error) => {
-      console.error(error);
-      alert("Something went wrong");
+      console.error("Add Product Error:", error);
+      alert("Something went wrong while adding the product.");
     },
   });
 
-  function handleAddProduct(product) {
-    console.log("Product Data:", product);
-    mutation.mutate(product);
+  function handleAddProduct(productData) {
+    mutation.mutate(productData);
   }
 
   return (
@@ -39,7 +48,7 @@ function AddProduct() {
       <ProductForm
         initialData={{}}
         onSubmit={handleAddProduct}
-        buttonText="Add Product"
+        buttonText={mutation.isPending ? "Adding..." : "Add Product"}
       />
     </div>
   );

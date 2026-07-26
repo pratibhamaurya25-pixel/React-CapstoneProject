@@ -54,18 +54,20 @@ export async function createProduct(product) {
 
 // Delete product
 export async function deleteProduct(productId) {
-  const response = await fetch(
-    `${API_URL}/${productId}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const response = await fetch(`${API_URL}/${productId}`, {
+    method: "DELETE",
+  });
+
+  const data = await response.json();
+
+  console.log("DELETE STATUS:", response.status);
+  console.log("DELETE RESPONSE:", data);
 
   if (!response.ok) {
-    throw new Error("Failed to delete product");
+    throw new Error(data.message || "Failed to delete product");
   }
 
-  return await response.json();
+  return data;
 }
 
 
