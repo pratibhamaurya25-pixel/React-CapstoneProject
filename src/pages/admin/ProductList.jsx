@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { getProducts, deleteProduct } from "../../services/api";
@@ -8,6 +9,7 @@ import "../../styles/ProductList.css";
 
 function ProductList() {
   const navigate = useNavigate();
+
   const queryClient = useQueryClient();
 
   const {
@@ -17,7 +19,9 @@ function ProductList() {
     error,
   } = useQuery({
     queryKey: ["products"],
+
     queryFn: getProducts,
+
     staleTime: Infinity,
   });
 
@@ -25,19 +29,25 @@ function ProductList() {
     mutationFn: deleteProduct,
 
     onSuccess: (_, deletedId) => {
-      alert("Product Deleted Successfully!");
-
       queryClient.setQueryData(["products"], (oldProducts = []) =>
-        oldProducts.filter((product) => product.id !== deletedId),
+        oldProducts.filter(
+          (product) => String(product.id) !== String(deletedId),
+        ),
       );
+
+      alert("Product Deleted Successfully");
     },
 
     onError: (error, deletedId) => {
       console.error("Delete Error:", error);
 
-      // Remove from UI even if DummyJSON fails
+      // DummyJSON gives error sometimes
+      // Remove from UI manually
+
       queryClient.setQueryData(["products"], (oldProducts = []) =>
-        oldProducts.filter((product) => product.id !== deletedId),
+        oldProducts.filter(
+          (product) => String(product.id) !== String(deletedId),
+        ),
       );
 
       alert("Product removed from UI");
@@ -52,6 +62,12 @@ function ProductList() {
     if (confirmDelete) {
       deleteMutation.mutate(id);
     }
+  }
+
+  function handleEdit(id) {
+    console.log("Editing Product ID:", id);
+
+    navigate(`/admin/edit-product/${id}`);
   }
 
   if (isLoading) {
@@ -105,22 +121,26 @@ function ProductList() {
 
                   <td className="product-title">{product.title}</td>
 
-                  <td className="product-price">₹ {product.price}</td>
+                  <td>$ {product.price}</td>
 
-                  <td className="product-category">{product.category}</td>
+                  <td>{product.category}</td>
 
                   <td>
                     <div className="action-buttons">
                       <button
+                        type="button"
                         className="btn-action edit"
-                        onClick={() =>
-                          navigate(`/admin/edit-product/${product.id}`)
-                        }
+                        onClick={() => {
+                          console.log("Edit clicked:", product.id);
+
+                          navigate(`/admin/edit-product/${product.id}`);
+                        }}
                       >
                         Edit
                       </button>
 
                       <button
+                        type="button"
                         className="btn-action delete"
                         onClick={() => handleDelete(product.id)}
                         disabled={deleteMutation.isPending}

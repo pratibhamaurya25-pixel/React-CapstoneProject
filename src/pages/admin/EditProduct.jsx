@@ -1,137 +1,130 @@
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import ProductForm from "../../components/ProductForm";
 import Loader from "../../components/Loader";
 
-import {
-  getProductById,
-  updateProduct,
-} from "../../services/api";
-
+import { getProductById, updateProduct } from "../../services/api";
 
 function EditProduct() {
-
   const { id } = useParams();
 
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
-
   const {
     data: product,
     isLoading,
     isError,
-    error,
   } = useQuery({
-
     queryKey: ["product", id],
 
-    queryFn: () => getProductById(id),
+    queryFn: async () => {
+      // First check product list cache
 
+      const products = queryClient.getQueryData(["products"]);
+
+      const existingProduct = products?.find(
+        (item) => String(item.id) === String(id),
+      );
+
+      if (existingProduct) {
+        return existingProduct;
+      }
+
+      // If not in cache call API
+
+      return await getProductById(id);
+    },
   });
 
+  // const mutation = useMutation({
+  //   mutationFn: (data) => updateProduct(id, data),
 
+  //   onSuccess: (updatedProduct) => {
+  //     alert("Product Updated Successfully");
+
+  //     queryClient.setQueryData(["products"], (oldProducts = []) =>
+  //       oldProducts.map((item) =>
+  //         String(item.id) === String(id)
+  //           ? {
+  //               ...item,
+  //               ...updatedProduct,
+  //             }
+  //           : item,
+  //       ),
+  //     );
+
+  //     navigate("/admin/products");
+  //   },
+
+  //   onError: (error) => {
+  //     console.log(error);
+
+  //     alert("Update Failed");
+  //   },
+  // });
 
   const mutation = useMutation({
+    mutationFn: async (data) => {
+      const products = queryClient.getQueryData(["products"]);
 
-    mutationFn: (productData) =>
-      updateProduct(id, productData),
+      const existingProduct = products?.find(
+        (item) => String(item.id) === String(id),
+      );
 
+      // If product exists only in cache
+      if (existingProduct) {
+        return {
+          ...existingProduct,
+          ...data,
+        };
+      }
 
+      // Real DummyJSON products
+      return updateProduct(id, data);
+    },
 
     onSuccess: (updatedProduct) => {
-
       alert("Product Updated Successfully");
 
-
-      // Update single product cache
-      queryClient.setQueryData(
-        ["product", id],
-        updatedProduct
+      queryClient.setQueryData(["products"], (oldProducts = []) =>
+        oldProducts.map((item) =>
+          String(item.id) === String(id) ? updatedProduct : item,
+        ),
       );
-
-
-      // Update product list cache
-      queryClient.setQueryData(
-        ["products"],
-        (oldProducts = []) =>
-          oldProducts.map((product) =>
-            product.id === updatedProduct.id
-              ? updatedProduct
-              : product
-          )
-      );
-
 
       navigate("/admin/products");
-
     },
-
 
     onError: (error) => {
+      console.log(error);
 
-      console.error("Update Error:", error);
-
-      alert("Failed to update product");
-
+      alert("Update Failed");
     },
-
   });
 
-
-
-  function handleUpdate(productData) {
-
-    mutation.mutate(productData);
-
-  }
-
-
-
   if (isLoading) {
-
     return <Loader />;
-
   }
 
-
-
-  if (isError) {
-
-    return <h2>{error.message}</h2>;
-
+  if (isError || !product) {
+    return <h2>Product not found</h2>;
   }
-
-
 
   return (
-
     <div>
-
       <h1>Edit Product</h1>
 
-
       <ProductForm
-
         initialData={product}
-
-        onSubmit={handleUpdate}
-
+        onSubmit={(data) => mutation.mutate(data)}
         buttonText="Update Product"
-
       />
-
     </div>
-
   );
-
 }
-
 
 export default EditProduct;

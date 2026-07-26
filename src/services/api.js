@@ -1,8 +1,9 @@
 const API_URL = "https://dummyjson.com/products";
 
 
-// Get all products
+// GET ALL PRODUCTS
 export async function getProducts() {
+
   const response = await fetch(API_URL);
 
   if (!response.ok) {
@@ -11,98 +12,121 @@ export async function getProducts() {
 
   const data = await response.json();
 
-  console.log("PRODUCT DATA:", data);
-
   return data.products;
 }
 
 
-// Get single product by id
-export async function getProductById(productId) {
+
+// GET SINGLE PRODUCT
+export async function getProductById(id) {
+
   const response = await fetch(
-    `${API_URL}/${productId}`
+    `${API_URL}/${id}`
   );
 
+
   if (!response.ok) {
-    throw new Error("Failed to fetch product");
+    throw new Error("Product not found");
   }
 
-  return await response.json();
+
+  return response.json();
 }
 
 
-// Add product
+
+// CREATE PRODUCT
 export async function createProduct(product) {
+
   const response = await fetch(
     `${API_URL}/add`,
     {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
       },
-      body: JSON.stringify(product),
+
+      body:JSON.stringify(product)
+
     }
   );
 
-  if (!response.ok) {
+
+  if(!response.ok){
+
     throw new Error("Failed to create product");
+
   }
 
-  return await response.json();
+
+  return response.json();
+
 }
 
 
-// Delete product
-export async function deleteProduct(productId) {
-  const response = await fetch(`${API_URL}/${productId}`, {
-    method: "DELETE",
-  });
-
-  const data = await response.json();
-
-  console.log("DELETE STATUS:", response.status);
-  console.log("DELETE RESPONSE:", data);
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to delete product");
-  }
-
-  return data;
-}
 
 
-// Update product
-export async function updateProduct(productId, product) {
+// UPDATE PRODUCT
+export async function updateProduct(id, product) {
+
+
   const response = await fetch(
-    `${API_URL}/${productId}`,
+    `${API_URL}/${id}`,
     {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+
+      method:"PUT",
+
+      headers:{
+        "Content-Type":"application/json"
       },
-      body: JSON.stringify(product),
+
+      body:JSON.stringify(product)
+
     }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to update product");
+
+  if(!response.ok){
+
+    throw new Error(
+      "Failed to update product"
+    );
+
   }
 
-  return await response.json();
+
+  return response.json();
+
 }
 
 
-// Get carts
-export async function getCarts() {
+
+
+
+// DELETE PRODUCT
+export async function deleteProduct(id) {
+
+
   const response = await fetch(
-    "https://dummyjson.com/carts"
+    `${API_URL}/${id}`,
+    {
+
+      method:"DELETE"
+
+    }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch carts");
+
+  if(!response.ok){
+
+    throw new Error(
+      "Failed to delete product"
+    );
+
   }
 
-  const data = await response.json();
 
-  return data.carts;
+  return response.json();
+
 }
