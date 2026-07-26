@@ -1,14 +1,27 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+
 import ProductForm from "../../components/ProductForm";
 import Loader from "../../components/Loader";
 
-import { getProductById, updateProduct } from "../../services/api";
+import {
+  getProductById,
+  updateProduct,
+} from "../../services/api";
+
 
 function EditProduct() {
+
   const { id } = useParams();
+
   const navigate = useNavigate();
+
   const queryClient = useQueryClient();
+
 
   const {
     data: product,
@@ -16,48 +29,109 @@ function EditProduct() {
     isError,
     error,
   } = useQuery({
+
     queryKey: ["product", id],
+
     queryFn: () => getProductById(id),
+
   });
+
+
 
   const mutation = useMutation({
-    mutationFn: (productData) => updateProduct(id, productData),
 
-    onSuccess: () => {
+    mutationFn: (productData) =>
+      updateProduct(id, productData),
+
+
+
+    onSuccess: (updatedProduct) => {
+
       alert("Product Updated Successfully");
 
-      queryClient.invalidateQueries({
-        queryKey: ["products"],
-      });
+
+      // Update single product cache
+      queryClient.setQueryData(
+        ["product", id],
+        updatedProduct
+      );
+
+
+      // Update product list cache
+      queryClient.setQueryData(
+        ["products"],
+        (oldProducts = []) =>
+          oldProducts.map((product) =>
+            product.id === updatedProduct.id
+              ? updatedProduct
+              : product
+          )
+      );
+
 
       navigate("/admin/products");
+
     },
+
 
     onError: (error) => {
-      console.error(error);
+
+      console.error("Update Error:", error);
+
       alert("Failed to update product");
+
     },
+
   });
 
+
+
   function handleUpdate(productData) {
+
     mutation.mutate(productData);
+
   }
 
-  if (isLoading) return <Loader />;
 
-  if (isError) return <h2>{error.message}</h2>;
+
+  if (isLoading) {
+
+    return <Loader />;
+
+  }
+
+
+
+  if (isError) {
+
+    return <h2>{error.message}</h2>;
+
+  }
+
+
 
   return (
+
     <div>
+
       <h1>Edit Product</h1>
 
+
       <ProductForm
+
         initialData={product}
+
         onSubmit={handleUpdate}
+
         buttonText="Update Product"
+
       />
+
     </div>
+
   );
+
 }
+
 
 export default EditProduct;

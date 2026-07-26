@@ -1,23 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import {
-  getProducts,
-  deleteProduct,
-} from "../../services/api";
+import { getProducts, deleteProduct } from "../../services/api";
 
 import Loader from "../../components/Loader";
 import "../../styles/ProductList.css";
 
-
 function ProductList() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
 
   const {
     data: products = [],
@@ -30,270 +21,128 @@ function ProductList() {
     staleTime: Infinity,
   });
 
-
-
   const deleteMutation = useMutation({
-
     mutationFn: deleteProduct,
 
-
     onSuccess: (_, deletedId) => {
-
       alert("Product Deleted Successfully!");
 
-      queryClient.setQueryData(
-        ["products"],
-        (oldProducts = []) =>
-          oldProducts.filter(
-            (product) => product.id !== deletedId
-          )
+      queryClient.setQueryData(["products"], (oldProducts = []) =>
+        oldProducts.filter((product) => product.id !== deletedId),
       );
     },
 
-
     onError: (error, deletedId) => {
-
       console.error("Delete Error:", error);
 
-
       // Remove from UI even if DummyJSON fails
-      queryClient.setQueryData(
-        ["products"],
-        (oldProducts = []) =>
-          oldProducts.filter(
-            (product) => product.id !== deletedId
-          )
+      queryClient.setQueryData(["products"], (oldProducts = []) =>
+        oldProducts.filter((product) => product.id !== deletedId),
       );
-
 
       alert("Product removed from UI");
     },
-
   });
 
-
-
   function handleDelete(id) {
-
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?"
+      "Are you sure you want to delete this product?",
     );
-
 
     if (confirmDelete) {
       deleteMutation.mutate(id);
     }
-
   }
-
-
 
   if (isLoading) {
     return <Loader />;
   }
 
-
-
   if (isError) {
     return <h2>{error.message}</h2>;
   }
 
-
-
   return (
-
     <div className="manage-products-page">
-
-
       <div className="manage-header">
-
-        <h1>
-          Manage Products
-        </h1>
-
+        <h1>Manage Products</h1>
 
         <button
           className="btn-add-product"
-          onClick={() =>
-            navigate("/admin/add-product")
-          }
+          onClick={() => navigate("/admin/add-product")}
         >
           + Add Product
         </button>
-
       </div>
 
-
-
-
       <div className="table-card">
-
-
         <table className="admin-table">
-
-
           <thead>
-
             <tr>
+              <th>Image</th>
 
-              <th>
-                Image
-              </th>
+              <th>Title</th>
 
-              <th>
-                Title
-              </th>
+              <th>Price</th>
 
-              <th>
-                Price
-              </th>
+              <th>Category</th>
 
-              <th>
-                Category
-              </th>
-
-              <th>
-                Actions
-              </th>
-
+              <th>Actions</th>
             </tr>
-
           </thead>
 
-
-
-
           <tbody>
-
-
             {products.length > 0 ? (
-
               products.map((product) => (
-
                 <tr key={product.id}>
-
-
                   <td>
-
                     <img
-                      src={
-                        product.thumbnail ||
-                        product.image
-                      }
+                      src={product.thumbnail || product.image}
                       alt={product.title}
                       className="table-thumb"
                     />
-
                   </td>
 
+                  <td className="product-title">{product.title}</td>
 
+                  <td className="product-price">₹ {product.price}</td>
 
-                  <td className="product-title">
-
-                    {product.title}
-
-                  </td>
-
-
-
-
-                  <td className="product-price">
-
-                    ₹ {product.price}
-
-                  </td>
-
-
-
-
-                  <td className="product-category">
-
-                    {product.category}
-
-                  </td>
-
-
-
+                  <td className="product-category">{product.category}</td>
 
                   <td>
-
-
                     <div className="action-buttons">
-
-
                       <button
                         className="btn-action edit"
                         onClick={() =>
-                          navigate(
-                            `/admin/edit-product/${product.id}`
-                          )
+                          navigate(`/admin/edit-product/${product.id}`)
                         }
                       >
                         Edit
                       </button>
 
-
-
-
                       <button
                         className="btn-action delete"
-                        onClick={() =>
-                          handleDelete(product.id)
-                        }
-                        disabled={
-                          deleteMutation.isPending
-                        }
+                        onClick={() => handleDelete(product.id)}
+                        disabled={deleteMutation.isPending}
                       >
-
-                        {
-                          deleteMutation.isPending
-                            ? "Deleting..."
-                            : "Delete"
-                        }
-
+                        {deleteMutation.isPending ? "Deleting..." : "Delete"}
                       </button>
-
-
                     </div>
-
-
                   </td>
-
-
-
                 </tr>
-
               ))
-
             ) : (
-
               <tr>
-
-                <td
-                  colSpan="5"
-                  className="empty-table"
-                >
+                <td colSpan="5" className="empty-table">
                   No Products Found
                 </td>
-
               </tr>
-
             )}
-
-
           </tbody>
-
-
         </table>
-
-
       </div>
-
-
     </div>
-
   );
 }
-
 
 export default ProductList;
