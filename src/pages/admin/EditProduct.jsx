@@ -22,7 +22,6 @@ function EditProduct() {
     queryKey: ["product", id],
 
     queryFn: async () => {
-      // First check product list cache
 
       const products = queryClient.getQueryData(["products"]);
 
@@ -34,38 +33,9 @@ function EditProduct() {
         return existingProduct;
       }
 
-      // If not in cache call API
-
       return await getProductById(id);
     },
   });
-
-  // const mutation = useMutation({
-  //   mutationFn: (data) => updateProduct(id, data),
-
-  //   onSuccess: (updatedProduct) => {
-  //     alert("Product Updated Successfully");
-
-  //     queryClient.setQueryData(["products"], (oldProducts = []) =>
-  //       oldProducts.map((item) =>
-  //         String(item.id) === String(id)
-  //           ? {
-  //               ...item,
-  //               ...updatedProduct,
-  //             }
-  //           : item,
-  //       ),
-  //     );
-
-  //     navigate("/admin/products");
-  //   },
-
-  //   onError: (error) => {
-  //     console.log(error);
-
-  //     alert("Update Failed");
-  //   },
-  // });
 
   const mutation = useMutation({
     mutationFn: async (data) => {
@@ -75,7 +45,6 @@ function EditProduct() {
         (item) => String(item.id) === String(id),
       );
 
-      // If product exists only in cache
       if (existingProduct) {
         return {
           ...existingProduct,
@@ -83,7 +52,6 @@ function EditProduct() {
         };
       }
 
-      // Real DummyJSON products
       return updateProduct(id, data);
     },
 
