@@ -41,15 +41,6 @@ function Products() {
         ))}
       </div>
 
-      {/* Remove this if you haven't implemented pagination */}
-      {/* 
-      <div className="pagination">
-        <button className="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>&gt;</button>
-      </div>
-      */}
     </div>
   );
 }

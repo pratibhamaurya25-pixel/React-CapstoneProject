@@ -9,7 +9,7 @@ function ProductCard({ product }) {
 
   const imageSrc = product.thumbnail || product.image;
 
-  return (
+  return ( 
     <div className="product-card">
       <div className="product-card-img-wrapper">
         <img src={imageSrc} alt={product.title} />
