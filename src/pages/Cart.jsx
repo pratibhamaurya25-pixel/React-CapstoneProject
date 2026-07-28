@@ -14,7 +14,7 @@ function Cart() {
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
-    0
+    0,
   );
 
   const handleCheckout = () => {
@@ -25,8 +25,8 @@ function Cart() {
 
     const confirmOrder = window.confirm(
       `Your total is ₹${totalPrice.toFixed(
-        2
-      )}.\n\nDo you want to place the order?`
+        2,
+      )}.\n\nDo you want to place the order?`,
     );
 
     if (confirmOrder) {
@@ -59,18 +59,12 @@ function Cart() {
 
           return (
             <div key={item.id} className="cart-item">
-              <img
-                src={imageSrc}
-                alt={item.title}
-                className="cart-item-img"
-              />
+              <img src={imageSrc} alt={item.title} className="cart-item-img" />
 
               <div className="cart-item-details">
                 <h3>{item.title}</h3>
                 <p className="cart-item-category">{item.category}</p>
-                <p className="cart-item-price">
-                  ₹{item.price}
-                </p>
+                <p className="cart-item-price">₹{item.price}</p>
               </div>
 
               <div className="cart-quantity-controls">
@@ -100,17 +94,11 @@ function Cart() {
         <h2>Total: ₹{totalPrice.toFixed(2)}</h2>
 
         <div className="cart-actions">
-          <button
-            className="btn-clear"
-            onClick={clearCart}
-          >
+          <button className="btn-clear" onClick={clearCart}>
             Clear Cart
           </button>
 
-          <button
-            className="btn-checkout"
-            onClick={handleCheckout}
-          >
+          <button className="btn-checkout" onClick={handleCheckout}>
             Checkout Now
           </button>
         </div>
