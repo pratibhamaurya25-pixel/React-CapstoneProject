@@ -9,7 +9,7 @@ function Sidebar() {
   return (
     <aside className="admin-sidebar">
       <div className="sidebar-brand">
-        <h2>ShopZone</h2>
+        <h2>Nexus</h2>
         <span className="badge-admin">Admin</span>
       </div>
 
