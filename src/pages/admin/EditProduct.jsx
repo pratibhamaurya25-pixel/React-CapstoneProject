@@ -87,6 +87,7 @@ function EditProduct() {
       <h1>Edit Product</h1>
 
       <ProductForm
+      
         initialData={product}
         onSubmit={(data) => mutation.mutate(data)}
         buttonText="Update Product"
